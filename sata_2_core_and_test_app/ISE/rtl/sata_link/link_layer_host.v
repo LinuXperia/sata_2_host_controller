@@ -129,7 +129,7 @@ module link_layer#(
   wire        eof_t_for_data_out_vld_t;
   
                                                                                       
-  //tintu : for making PHY detect                                                        
+  // for making PHY detect                                                        
   always @(posedge clk, posedge rst)                                                      
   begin                                                                                   
     if (rst)                                                                            
@@ -554,7 +554,7 @@ module link_layer#(
         tx_crc_en       <= 0;
         illegal_state_t <= 0;        
 
-        if(PHYRDY)// edited by tintu : checking PHYRDY from device
+        if(PHYRDY)//  checking PHYRDY from device
         begin
           if (data_in_p_int == `X_RDY) begin
             state           <= `L_RcvWaitFifo;
@@ -619,7 +619,7 @@ module link_layer#(
         tx_crc_en       <= 0;
         X_RDY_SENT_T    <= 1;
         
-        if(PHYRDY)// edited by tintu : checking PHYRDY from device
+        if(PHYRDY)//  checking PHYRDY from device
         begin
           if (data_in_p_int == `R_RDY && count_for_align != 8'hFD && count_for_align != 8'hFE && count_for_align != 8'hFF) begin
             state           <= `L_SendSOF ;
@@ -699,7 +699,7 @@ module link_layer#(
         X_RDY_SENT_T <= 0;
         rx_fail_T    <= 0;
 
-        if(PHYRDY) begin// edited by tintu : checking PHYRDY from device
+        if(PHYRDY) begin//  checking PHYRDY from device
           if (EscapeCF_T) begin
             illegal_state_t <= 0;
             state           <= `L_SyncEscape ;
@@ -761,7 +761,7 @@ module link_layer#(
             scrmb_rst       <= 0;
             tx_crc_en       <= 1;
           end
-          else if(data_in_p_int == `HOLD && !frame_end_T) begin // tintu : data transfer not complete :!frame_end_T
+          else if(data_in_p_int == `HOLD && !frame_end_T) begin // data transfer not complete :!frame_end_T
             illegal_state_t <= 0;
             state           <= `L_RcvrHold;
             data_in_rd_en_t <= 0;
@@ -771,7 +771,7 @@ module link_layer#(
             tx_crc_en       <= 0;
             data_in_rd_last_word <= data_rdy_T;
           end
-          else if (!current_data_rdy_T && data_in_p_int != `SYNC && !frame_end_T) begin // tintu : data transfer not complete :!frame_end_T
+          else if (!current_data_rdy_T && data_in_p_int != `SYNC && !frame_end_T) begin // data transfer not complete :!frame_end_T
             illegal_state_t <= 0;
             state           <= `L_SendHold ;
             data_in_rd_en_t <= 0;
@@ -826,9 +826,9 @@ module link_layer#(
         X_RDY_SENT_T <= 0;
         rx_fail_T    <= 0;
 
-        if(PHYRDY)// edited by tintu : checking PHYRDY from device
+        if(PHYRDY)// checking PHYRDY from device
         begin
-          if (EscapeCF_T) begin //tintu : High priority
+          if (EscapeCF_T) begin // High priority
             illegal_state_t <= 0;
             state           <= `L_SyncEscape ;
             data_in_rd_en_t <= 0;
@@ -837,7 +837,7 @@ module link_layer#(
             scrmb_rst       <= 1;
             tx_crc_en       <= 0;
           end
-          else if (data_in_p_int == `SYNC && data_rdy_T ) //tintu : more data to transmit
+          else if (data_in_p_int == `SYNC && data_rdy_T ) // more data to transmit
           begin
             illegal_state_t <= 1;
             state           <= `L_IDLE ;
@@ -847,7 +847,7 @@ module link_layer#(
             scrmb_rst       <= 1;
             tx_crc_en       <= 0;
           end
-          else if (data_in_p_int == `DMAT && data_rdy_T ) begin //tintu : more data to transmit
+          else if (data_in_p_int == `DMAT && data_rdy_T ) begin // more data to transmit
             illegal_state_t <= 0;
             state           <= `L_SendCRC;
             data_in_rd_en_t <= 0;
@@ -856,7 +856,7 @@ module link_layer#(
             scrmb_rst       <= 0;
             tx_crc_en       <= 1;
           end
-          else if ((data_in_p_int == `HOLD && data_rdy_T) || DecErr) begin //tintu : more data to transmit
+          else if ((data_in_p_int == `HOLD && data_rdy_T) || DecErr) begin // more data to transmit
             illegal_state_t <= 0;
             state           <= `L_RcvrHold ;
             data_in_rd_en_t <= 0;
@@ -874,7 +874,7 @@ module link_layer#(
             scrmb_rst       <= 0;
             tx_crc_en       <= 0;
           end
-          else if (data_in_p_int != `HOLD && data_in_p_int != `SYNC &&    // tintu : no HOLD SYNC DMAT
+          else if (data_in_p_int != `HOLD && data_in_p_int != `SYNC &&    // no HOLD SYNC DMAT
                      data_in_p_int != `DMAT  && data_rdy_T && !DecErr) begin         
             illegal_state_t <= 0;
             state           <= `L_SendData ;
@@ -912,7 +912,7 @@ module link_layer#(
         rx_fail_T    <= 0;
         
         
-        if(PHYRDY)// edited by tintu : checking PHYRDY from device
+        if(PHYRDY)// checking PHYRDY from device
         begin
           if (data_in_p_int == `HOLD && data_rdy_T) begin
             illegal_state_t <= 0;
@@ -923,7 +923,7 @@ module link_layer#(
             scrmb_rst       <= 0;
             tx_crc_en       <= 0;
           end
-          else if (!data_rdy_T && data_in_p_int != `SYNC && data_in_p_int != `DMAT) begin // tintu &&
+          else if (!data_rdy_T && data_in_p_int != `SYNC && data_in_p_int != `DMAT) begin // &&
             illegal_state_t <= 0;
             state           <= `L_SendHold ;
             data_in_rd_en_t <= 0;
@@ -969,7 +969,7 @@ module link_layer#(
             scrmb_rst       <= 1;
             tx_crc_en       <= 0;
           end
-          else if (data_in_p_int != `HOLD && data_in_p_int != `SYNC && data_rdy_T) begin //tintu : &&
+          else if (data_in_p_int != `HOLD && data_in_p_int != `SYNC && data_rdy_T) begin // &&
             illegal_state_t <= 0;
             state           <= `L_SendData ;
             data_in_rd_en_t <= 1;
